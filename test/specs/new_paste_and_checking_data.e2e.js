@@ -1,0 +1,30 @@
+const SecondLevelPage = require('../pageobjects/secondLevelPage');
+
+
+describe('Creating New Paste', () => {
+  let ourCode = `git config --global user.name  "New Sheriff in Town"
+  git reset $(git commit-tree HEAD^{tree} -m "Legacy code")
+  git push origin master --force`
+
+  let title = 'how to gain dominance among developers'
+
+  it('filling page ', async () => {
+    await SecondLevelPage.open();
+
+    await SecondLevelPage.setDatas(ourCode, title);
+
+  });
+
+  it('text is correct', async () => {
+    await expect(SecondLevelPage.TextArea).toHaveText(ourCode);
+  })
+
+  it('title is correct', async () => {
+    await expect(browser).toHaveTitleContaining(title);
+  })
+
+  it('syntax highlighting is correct', async () => {
+    await expect(SecondLevelPage.SyntaxBash).toHaveText('Bash');
+  })
+
+});
