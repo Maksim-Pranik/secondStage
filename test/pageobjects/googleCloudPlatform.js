@@ -16,9 +16,10 @@ class GoogleCloudPlatform extends Page {
   get LocalSSDField() { return $(`[placeholder='Local SSD']`) }
   get LocalSSDValue() { return $(`md-option[value='2'][ng-repeat="item in listingCtrl.dynamicSsd.computeServer"]`) }
   get Location() { return $(`//md-select[@placeholder='Datacenter location']`) }
-  get LocationValue() { return $(`#select_option_212`) }
+  get LocationValue() { return $(`/html/body/div[8]/md-select-menu/md-content/md-option[10]`) }
   get CommitedUsage() { return $(`//md-select[@placeholder='Committed usage']`) }
-  get CommitedUsageValue() { return $(`#select_option_99`) }
+  get CommitedUsageValue() { return $("div[class='md-select-menu-container md-active md-clickable']" +
+  " md-option[value='1'][class='md-ink-ripple']") }
   get AddToEstimate() { return $(`[aria-label="Add to Estimate"]`) }
   get EstimateTableVMclas() { return $('//*[@id="compute"]/md-list/md-list-item[2]/div') }
   get EstimateTableInstanceType() { return $('//*[@id="compute"]/md-list/md-list-item[3]/div') }
@@ -31,10 +32,7 @@ class GoogleCloudPlatform extends Page {
   get SendEmailBtn() { return $('[aria-label="Send Email"]') }
   get LinkToEmail() { return $(`//a[text() = 'Google Cloud Sales <noreply@google.com>']`) }
   get CostIntoLetter() { return $(`//*[@id="tab1"]/div[1]/div/table/tbody/tr[2]/td/h2`) }
-
-
-  //для теста с почтой
-  get Email() { return $('#copy-button') }
+  get EmailCopyButton() { return $('#copy-button') }
 
   open() {
     return super.open('https://cloud.google.com');
@@ -51,26 +49,30 @@ class GoogleCloudPlatform extends Page {
     browser.switchToFrame(0)
 
     await (await this.NumberOfInstances).setValue(NumberOfInstances)
+
     await (await this.Series).click()
     await (await this.SeriesOption).click()
-    await (await this.MachineType).click()
 
+    await (await this.MachineType).click()
     await (await this.MachineTypeOption).click()
+
     await (await this.AddGpu).click()
+
     await (await this.AddGpuNumberField).click()
     await (await this.AddGpuNumber).click()
+
     await (await this.AddGpuTypeField).click()
-
     await (await this.AddGpuType).click()
+
     await (await this.LocalSSDField).click()
-
     await (await this.LocalSSDValue).click()
+
     await (await this.Location).click()
-
     await (await this.LocationValue).click()
-    await (await this.CommitedUsage).click()
 
+    await (await this.CommitedUsage).click()
     await (await this.CommitedUsageValue).click()
+
     await (await this.AddToEstimate).click()
 
   }
@@ -81,7 +83,7 @@ class GoogleCloudPlatform extends Page {
 
   async CopyMail() {
 
-    await (await this.Email).click()
+    await (await this.EmailCopyButton).click()
   }
   async SentMail() {
 
@@ -92,9 +94,10 @@ class GoogleCloudPlatform extends Page {
 
   async WaitingForMail() {
     await browser.switchWindow('10minutemail.net')
-    await (await this.LinkToEmail).waitForExist({ timeout: 150000, reverse: false, timeoutMsg: 'ne sydba', interval: 10000 })
+    await (await this.LinkToEmail).waitForExist({ timeout: 150000, reverse: false, timeoutMsg: 'Something went wrong', interval: 10000 })
     await (await this.LinkToEmail).click()
-
+    await browser.refresh()
+    await (await this.LinkToEmail).click()
 
   }
 

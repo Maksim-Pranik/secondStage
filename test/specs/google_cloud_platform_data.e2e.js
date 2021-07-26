@@ -1,7 +1,7 @@
 const GoogleCloudPlatform = require('../pageobjects/googleCloudPlatform')
 
 
-describe('open calc page set params and check them', () => {
+describe('open calc page, set params and check them', () => {
   it('should open calc page', async () => {
     await GoogleCloudPlatform.open()
     await GoogleCloudPlatform.openSearchedPage()
@@ -21,35 +21,7 @@ describe('open calc page set params and check them', () => {
   });
 
   it('estimated cost is the same with manual entered', async () => {
-    await expect(GoogleCloudPlatform.EstimateTableCost).toHaveTextContaining('1,082.77');
-  });
-
-  it('push email btn', async () => {
-    await GoogleCloudPlatform.MailEstimate()
-  });
-
-  it('new wind', async () => {
-    browser.newWindow('https://10minutemail.net')
-
-    await GoogleCloudPlatform.CopyMail();
-
-    browser.switchWindow('cloud.google.com/products/')
-    await browser.pause(1000)
-    await browser.switchToFrame(0)
-    await browser.switchToFrame(0)
-
-  });
-
-  it('paste mail', async () => {
-    await GoogleCloudPlatform.SentMail();
-
-  });
-
-  it('waiting and reading email', async () => {
-
-    await GoogleCloudPlatform.WaitingForMail();
-    ///избавиться от рекламы
-    await expect(GoogleCloudPlatform.CostIntoLetter).toHaveTextContaining('1,082.77');
+    await expect(GoogleCloudPlatform.EstimateTableCost).toHaveTextContaining('1,083.33');
   });
 
 });

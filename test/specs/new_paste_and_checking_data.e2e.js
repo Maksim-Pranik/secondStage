@@ -1,4 +1,4 @@
-const SecondLevelPage = require('../pageobjects/secondLevelPage');
+const SecondLevelPastebinPage = require('../pageobjects/secondLevelPastebinPage');
 
 
 describe('Creating New Paste', () => {
@@ -9,14 +9,14 @@ describe('Creating New Paste', () => {
   let title = 'how to gain dominance among developers'
 
   it('filling page ', async () => {
-    await SecondLevelPage.open();
+    await SecondLevelPastebinPage.open();
 
-    await SecondLevelPage.setDatas(ourCode, title);
+    await SecondLevelPastebinPage.setDatas(ourCode, title);
 
   });
 
   it('text is correct', async () => {
-    await expect(SecondLevelPage.TextArea).toHaveText(ourCode);
+    await expect(SecondLevelPastebinPage.TextArea).toHaveText(ourCode);
   })
 
   it('title is correct', async () => {
@@ -24,7 +24,7 @@ describe('Creating New Paste', () => {
   })
 
   it('syntax highlighting is correct', async () => {
-    await expect(SecondLevelPage.SyntaxBash).toHaveText('Bash');
+    await expect(SecondLevelPastebinPage.SyntaxBash).toHaveText('Bash');
   })
 
 });
