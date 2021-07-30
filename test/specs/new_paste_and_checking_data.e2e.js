@@ -1,22 +1,24 @@
-const SecondLevelPastebinPage = require('../pageobjects/secondLevelPastebinPage');
+const secondLevelPastebinPage = require('../pageobjects/secondLevelPastebinPage');
 
 
 describe('Creating New Paste', () => {
-  let ourCode = `git config --global user.name  "New Sheriff in Town"
+  const codeForDispatch = `git config --global user.name  "New Sheriff in Town"
   git reset $(git commit-tree HEAD^{tree} -m "Legacy code")
   git push origin master --force`
 
-  let title = 'how to gain dominance among developers'
+  const title = 'how to gain dominance among developers'
 
-  it('filling page ', async () => {
-    await SecondLevelPastebinPage.open();
-
-    await SecondLevelPastebinPage.setDatas(ourCode, title);
-
+  before(async () => {
+    await secondLevelPastebinPage.open();
+    await secondLevelPastebinPage.fillTextArea(secondLevelPastebinPage.codeArea, codeForDispatch);
+    await secondLevelPastebinPage.setSyntaxHighlighting('Bash');
+    await secondLevelPastebinPage.setDropDownMenyParam(secondLevelPastebinPage.pasteExpirationList, secondLevelPastebinPage.necessoryExpiration)
+    await secondLevelPastebinPage.fillTextArea(secondLevelPastebinPage.titleArea, title)
+    await secondLevelPastebinPage.clickOnButton(secondLevelPastebinPage.btnSubmit);
   });
 
-  it('text is correct', async () => {
-    await expect(SecondLevelPastebinPage.TextArea).toHaveText(ourCode);
+  it('pasted data is correct', async () => {
+    await expect(secondLevelPastebinPage.textArea).toHaveText(codeForDispatch);
   })
 
   it('title is correct', async () => {
@@ -24,7 +26,7 @@ describe('Creating New Paste', () => {
   })
 
   it('syntax highlighting is correct', async () => {
-    await expect(SecondLevelPastebinPage.SyntaxBash).toHaveText('Bash');
+    await expect(secondLevelPastebinPage.syntaxBash).toHaveText('Bash');
   })
 
 });

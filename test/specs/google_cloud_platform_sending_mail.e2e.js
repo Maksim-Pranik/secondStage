@@ -1,44 +1,41 @@
-const GoogleCloudPlatform = require('../pageobjects/googleCloudPlatform')
+const googleCloudPlatform = require('../pageobjects/googleCloudPlatform')
 
 
 describe('open calc page, set params, send estimate at 10minutemail and check cost', () => {
-  it('open calc page', async () => {
-    await GoogleCloudPlatform.open()
-    await GoogleCloudPlatform.openSearchedPage()
-  });
-
-  it('sett all necessery params', async () => {
-    await GoogleCloudPlatform.setParams('4')
-
-  });
-
-  it('push email btn', async () => {
-    await GoogleCloudPlatform.MailEstimate()
-  });
-
-  it('copy email address at 10minutemail', async () => {
+  before(async () => {
+    await googleCloudPlatform.open()
+    await googleCloudPlatform.searchForPricingCalculator()
+    await googleCloudPlatform.openPricingCalculator()
+    await googleCloudPlatform.switchToNecessaryFrame()
+    await googleCloudPlatform.setNumberOfInstances('4')
+    await googleCloudPlatform.setDropDownMenyParam(
+      googleCloudPlatform.series, googleCloudPlatform.seriesOption)
+    await googleCloudPlatform.setDropDownMenyParam(
+      googleCloudPlatform.machineType, googleCloudPlatform.machineTypeOption)
+    await googleCloudPlatform.addNecessaryGpu();
+    await googleCloudPlatform.setDropDownMenyParam(
+      googleCloudPlatform.addGpuNumberField, googleCloudPlatform.addGpuNumber)
+    await googleCloudPlatform.setDropDownMenyParam(
+      googleCloudPlatform.addGpuTypeField, googleCloudPlatform.addGpuType)
+    await googleCloudPlatform.setDropDownMenyParam(
+      googleCloudPlatform.localSSDField, googleCloudPlatform.localSSDValue)
+    await googleCloudPlatform.setDropDownMenyParam(
+      googleCloudPlatform.location, googleCloudPlatform.locationValue)
+    await googleCloudPlatform.setDropDownMenyParam(
+      googleCloudPlatform.commitedUsage, googleCloudPlatform.commitedUsageValue)
+    await googleCloudPlatform.clickOnButton(googleCloudPlatform.addToEstimate)
+    await googleCloudPlatform.clickOnButton(googleCloudPlatform.emailEstimateBut)
     browser.newWindow('https://10minutemail.net')
-
-    await GoogleCloudPlatform.CopyMail();
-
-  });
-
-  it('paste mail at cloud.google page', async () => {
+    await googleCloudPlatform.clickOnButton(googleCloudPlatform.emailCopyButton)
     browser.switchWindow('cloud.google.com/products/')
-    await browser.pause(1000)
-    await browser.switchToFrame(0)
-    await browser.switchToFrame(0)
-
-    await GoogleCloudPlatform.SentMail();
-
+    await googleCloudPlatform.switchToNecessaryFrame()
+    await googleCloudPlatform.pasteMailAddress()
+    await googleCloudPlatform.clickOnButton(googleCloudPlatform.sendEmailBtn)
+    await googleCloudPlatform.waitingForMail()
   });
 
   it('wait and read email (confirm correct cost)', async () => {
-
-    await GoogleCloudPlatform.WaitingForMail();
-
-    await expect(GoogleCloudPlatform.CostIntoLetter).toHaveTextContaining('1,083.33');
-
+    await expect(googleCloudPlatform.costIntoLetter).toHaveTextContaining('1,083.33');
   });
 
 });

@@ -1,18 +1,20 @@
-const MainPastebinPage = require('../pageobjects/mainPastebinPage');
+const mainPastebinPage = require('../pageobjects/mainPastebinPage');
 
 describe('Creating New Paste', () => {
-  it('filling page ', async () => {
-    await MainPastebinPage.open();
-    await MainPastebinPage.setDatas('Hello from WebDriver4', 'Helloweb');
-
+  before(async () => {
+    await mainPastebinPage.open();
+    await mainPastebinPage.fillTextArea(mainPastebinPage.codeArea, 'Hello from WebDriver');
+    await mainPastebinPage.setDropDownMenyParam(mainPastebinPage.pasteExpirationList, mainPastebinPage.necessoryExpiration)
+    await mainPastebinPage.fillTextArea(mainPastebinPage.titleArea, 'Helloweb')
+    await mainPastebinPage.clickOnButton(mainPastebinPage.btnSubmit);
   });
 
-  it('checking if text is correct', async () => {
-    await expect(await browser.$('textarea')).toHaveText(
+  it('pasted data is correct', async () => {
+    await expect(mainPastebinPage.codeArea).toHaveText(
       'Hello from WebDriver');
   })
 
-  it('checking if title is correct', async () => {
+  it('title is correct', async () => {
     await expect(browser).toHaveTitleContaining(
       'Helloweb');
   })

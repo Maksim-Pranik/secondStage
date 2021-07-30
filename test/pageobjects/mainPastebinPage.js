@@ -2,24 +2,34 @@ const Page = require('./page');
 
 class MainPastebinPage extends Page {
 
-    get CodeArea() { return $('#postform-text') }
-    get PasteExpirationList() { return $('#select2-postform-expiration-container') }
-    get NecessoryExpiration() { return $('#select2-postform-expiration-results li:nth-child(3)') }
-    get TitleArea() { return $('#postform-name') }
+    get codeArea() { return $('#postform-text') }
+    get pasteExpirationList() { return $('#select2-postform-expiration-container') }
+    get necessoryExpiration() { return $('#select2-postform-expiration-results li:nth-child(3)') }
+    get titleArea() { return $('#postform-name') }
+    get textArea() { return $('textarea') }
     get btnSubmit() { return $('button[type="submit"]') }
-
-
-    async setDatas(ourCode, title) {
-        await (await this.CodeArea).setValue(ourCode);
-        await (await this.PasteExpirationList).click();
-        await (await this.NecessoryExpiration).click;
-        await (await this.TitleArea).setValue(title);
-        await (await this.btnSubmit).click();
-    }
 
     open() {
         return super.open('https://pastebin.com');
     }
+    
+    async fillTextArea(textArea, textForFill) {
+        await (await textArea).waitForExist()
+        await (await textArea).setValue(textForFill);
+    }
+
+    async setDropDownMenyParam(openDropDown, changeItem) {
+        await (await openDropDown).waitForClickable()
+        await (await openDropDown).click()
+        await (await changeItem).waitForClickable()
+        await (await changeItem).click()
+    }
+
+    async clickOnButton(button) {
+        await (await button).waitForClickable()
+        await (await button).click()
+      }
+
 }
 
 module.exports = new MainPastebinPage();
